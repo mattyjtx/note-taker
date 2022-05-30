@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -8,8 +9,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-//create list of routes
-// a get route for ALL the notes
+//HTML GET ROUTES
+
+// GET Route for index.html
+app.get('/', (req, res) =>
+  res.sendFile(path.join(__dirname, '/public/index.html'))
+);
+// GET Route for notes.html
+app.get('/notes', (req, res) =>
+  res.sendFile(path.join(__dirname, '/public/notes.html'))
+);
+
+
 
 // get route
 app.get('/api/notes', (req, res) => {
