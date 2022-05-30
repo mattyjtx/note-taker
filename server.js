@@ -31,15 +31,27 @@ app.post('/api/notes', (req, res) => {
             if (err) throw err;
             res.json(parsedData);
         })
-        // res.json(parsedData);
+       
     } );
     
 });
 
-// delete route
 
-// may want to put some of the logic in a seperate function
-//getData()
-// this function might need to be a promise
+// DELETE route: DELETE /api/notes/:id should receive a query parameter that contains the id of a note to delete. 
+app.delete('/api/notes/:id', (req, res) => {
+    // To delete a note: read all notes from db.json
+    fs.readFile('./db/db.json', 'utf-8', (err, data) => {
+        if (err) throw err;
+        // remove note with given id property
+        const idData = JSON.parse(data);
+        const deletedNote = req.body.id;
+        idData.filter(data => data.id !== deletedNote);
+        // rewrite notes to db.json
+        fs.writeFile('./db/db.json', JSON.stringify(idData), (err, data) => {
+            if (err) throw err;
+            res.json(idData);
+        })
+    });
+});
 
 app.listen(PORT, () => console.log(`listening on PORT: ${PORT}`));
